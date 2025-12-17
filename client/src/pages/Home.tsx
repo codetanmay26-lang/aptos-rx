@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Stethoscope, Building2, Shield, Link as LinkIcon, FileCheck, ArrowRight, Zap } from 'lucide-react';
+import { Stethoscope, Building2, ArrowRight, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -102,63 +102,7 @@ export default function Home() {
         </Card>
       </section>
 
-      <section className="max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-3">How It Works</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">Simple, secure, and transparent prescription management</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { icon: FileCheck, title: 'Issue Prescription', desc: 'Doctor fills in patient and medication details. Data is hashed and stored on Aptos.' },
-            { icon: LinkIcon, title: 'Blockchain Record', desc: 'Prescription hash is recorded on Aptos blockchain, creating an immutable verification record.' },
-            { icon: Shield, title: 'Verify & Dispense', desc: 'Pharmacy verifies prescription authenticity and checks if it has been used before dispensing.' },
-          ].map((step, idx) => (
-            <div
-              key={idx}
-              className="relative p-6 rounded-xl border border-border/40 hover:border-primary/30 bg-white/80 backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-lg transition-all duration-300 group"
-            >
-              {/* Background accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -z-10 group-hover:bg-primary/8 transition-colors" />
-              
-              <div className="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-primary/30">
-                {idx + 1}
-              </div>
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-primary/20 transition-all border border-primary/10">
-                <step.icon className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="font-semibold mb-2 text-foreground">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {step.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="max-w-2xl mx-auto text-center space-y-8 py-8 relative z-10">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground mb-3">Why Blockchain?</h2>
-          <p className="text-muted-foreground">Trust through transparency and cryptography</p>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {[
-            { title: 'Immutable', desc: 'Records cannot be altered' },
-            { title: 'Transparent', desc: 'Verifiable by anyone' },
-            { title: 'Secure', desc: 'Cryptographically protected' },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-lg bg-white/80 backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 border border-border/40 hover:border-primary/30 hover:shadow-lg transition-all duration-300 group relative overflow-hidden"
-            >
-              {/* Background accent */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-xl -z-10 group-hover:scale-150 transition-transform" />
-              
-              <p className="font-semibold text-primary group-hover:text-primary mb-2 transition-colors">{item.title}</p>
-              <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Additional content removed for simplicity */}
     </div>
   );
 }

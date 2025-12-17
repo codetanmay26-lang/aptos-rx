@@ -27,7 +27,8 @@ import {
   Check
 } from 'lucide-react';
 import { hashPrescription, generatePrescriptionId, PrescriptionData, truncateAddress } from '@/lib/hash';
-import { buildIssuePrescriptionPayload, getExplorerUrl, isUsingDefaultAddress } from '@/lib/aptosClient';
+import { buildIssuePrescriptionPayload, getExplorerUrl, isUsingDefaultAddress, APTOS_NODE_URL } from '@/lib/aptosClient';
+import { savePrescriptionRecord } from '@/lib/firebase';
 
 const prescriptionSchema = z.object({
   patientId: z.string().min(1, 'Patient ID is required'),
@@ -95,12 +96,8 @@ export default function Doctor() {
       const payload = buildIssuePrescriptionPayload(data.prescriptionId, dataHash);
 
       // Always try to sign with wallet (even in demo mode) for real user experience
-      // Set options to skip simulation if contract not deployed
       const response = await signAndSubmitTransaction({
         data: payload as any,
-        options: {
-          checkSuccess: !isUsingDefaultAddress, // Skip success check in demo mode
-        }
       });
 
       setResult({
@@ -110,6 +107,26 @@ export default function Doctor() {
         dataHash: dataHash,
         doctorAddress: account.address.toString(),
         demoMode: isUsingDefaultAddress,
+      });
+
+      const network: 'testnet' | 'mainnet' | 'devnet' = APTOS_NODE_URL.includes('testnet')
+        ? 'testnet'
+        : APTOS_NODE_URL.includes('mainnet')
+        ? 'mainnet'
+        : 'devnet';
+
+      void savePrescriptionRecord({
+        prescriptionId: data.prescriptionId,
+        doctorAddress: account.address.toString(),
+        patientId: data.patientId,
+        drugName: data.drugName,
+        dosage: data.dosage,
+        notes: data.notes || '',
+        dataHash,
+        txHash: response.hash,
+        network,
+        issuedAt: Date.now(),
+        status: 'issued',
       });
 
       form.reset({

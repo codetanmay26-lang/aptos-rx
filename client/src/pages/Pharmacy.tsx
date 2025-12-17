@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { hashPrescription, PrescriptionData, truncateAddress } from '@/lib/hash';
 import { verifyPrescription, isUsingDefaultAddress, buildMarkUsedPayload } from '@/lib/aptosClient';
+import { markPrescriptionUsed } from '@/lib/firebase';
 
 const verifySchema = z.object({
   prescriptionId: z.string().min(1, 'Prescription ID is required'),
@@ -147,6 +148,7 @@ export default function Pharmacy() {
       const response = await signAndSubmitTransaction({ data: payload as any });
 
       setResult((prev) => prev ? { ...prev, markedUsed: true } : prev);
+      void markPrescriptionUsed(result.prescriptionId);
       console.info('✅ Marked as used. Tx:', response.hash);
     } catch (error) {
       console.error('Error marking used:', error);

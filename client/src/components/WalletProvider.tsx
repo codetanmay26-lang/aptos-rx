@@ -1,19 +1,21 @@
-import { AptosWalletAdapterProvider } from '@aptos-labs/wallet-adapter-react';
-import { PetraWallet } from 'petra-plugin-wallet-adapter';
+import {
+  AptosWalletAdapterProvider,
+  type AvailableWallets,
+} from '@aptos-labs/wallet-adapter-react';
 import { PropsWithChildren } from 'react';
 
-const wallets = [new PetraWallet()];
+const optInWallets: AvailableWallets[] = ['Petra'];
 
 export function WalletProvider({ children }: PropsWithChildren) {
   return (
-    <AptosWalletAdapterProvider
-      wallets={wallets}
-      autoConnect={true}
-      onError={(error) => {
-        console.error('Wallet connection error:', error);
-      }}
-    >
-      {children}
-    </AptosWalletAdapterProvider>
+      <AptosWalletAdapterProvider
+        optInWallets={optInWallets}
+        autoConnect={true}
+        onError={(error) => {
+          console.error('Wallet connection error:', error);
+        }}
+      >
+        {children}
+      </AptosWalletAdapterProvider>
   );
 }
