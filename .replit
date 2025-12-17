@@ -37,3 +37,9 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
+
+[userenv]
+
+[userenv.shared]
+VITE_APTOS_NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1"
+VITE_APTOS_CONTRACT_ADDRESS = "0x1"
