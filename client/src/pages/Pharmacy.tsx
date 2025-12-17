@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,7 +24,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { hashPrescription, PrescriptionData, truncateAddress } from '@/lib/hash';
-import { verifyPrescription } from '@/lib/aptosClient';
+import { verifyPrescription, isUsingDefaultAddress, buildMarkUsedPayload } from '@/lib/aptosClient';
 
 const verifySchema = z.object({
   prescriptionId: z.string().min(1, 'Prescription ID is required'),
@@ -42,10 +43,14 @@ interface VerificationResult {
   prescriptionId?: string;
   doctorAddress?: string;
   dataHash?: string;
+  demoMode?: boolean;
+  markedUsed?: boolean;
 }
 
 export default function Pharmacy() {
+  const { signAndSubmitTransaction, connected, account } = useWallet();
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isMarking, setIsMarking] = useState(false);
   const [result, setResult] = useState<VerificationResult | null>(null);
 
   const form = useForm<VerifyFormData>({
@@ -74,6 +79,21 @@ export default function Pharmacy() {
       };
 
       const dataHash = hashPrescription(prescriptionData);
+
+      // If contract is not deployed, skip blockchain verification and go straight to demo mode
+      if (isUsingDefaultAddress) {
+        console.info('⏭️ Skipping blockchain verification - contract not deployed, using demo mode');
+        setResult({
+          verified: true,
+          checked: true,
+          prescriptionId: data.prescriptionId,
+          doctorAddress: data.doctorAddress,
+          dataHash: dataHash,
+          demoMode: true,
+        });
+        return;
+      }
+
       const isValid = await verifyPrescription(data.doctorAddress, data.prescriptionId, dataHash);
 
       setResult({
@@ -82,15 +102,32 @@ export default function Pharmacy() {
         prescriptionId: data.prescriptionId,
         doctorAddress: data.doctorAddress,
         dataHash: dataHash,
+        demoMode: isValid && import.meta.env.VITE_APTOS_CONTRACT_ADDRESS === '0x1',
+        markedUsed: false,
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
       console.error('Verification error:', error);
-      setResult({
-        verified: false,
-        checked: true,
-        prescriptionId: data.prescriptionId,
-        doctorAddress: data.doctorAddress,
-      });
+      
+      // Check if contract not deployed - treat as demo mode verification
+      if (errorMessage.toLowerCase().includes('module') && errorMessage.toLowerCase().includes('not found')) {
+        setResult({
+          verified: true,
+          checked: true,
+          prescriptionId: data.prescriptionId,
+          doctorAddress: data.doctorAddress,
+          demoMode: true,
+          markedUsed: false,
+        });
+      } else {
+        setResult({
+          verified: false,
+          checked: true,
+          prescriptionId: data.prescriptionId,
+          doctorAddress: data.doctorAddress,
+          markedUsed: false,
+        });
+      }
     } finally {
       setIsVerifying(false);
     }
@@ -99,6 +136,23 @@ export default function Pharmacy() {
   const handleReset = () => {
     form.reset();
     setResult(null);
+  };
+
+  const handleMarkUsed = async () => {
+    if (!result?.verified || !result.prescriptionId || !connected || !account) return;
+
+    try {
+      setIsMarking(true);
+      const payload = buildMarkUsedPayload(result.prescriptionId);
+      const response = await signAndSubmitTransaction({ data: payload as any });
+
+      setResult((prev) => prev ? { ...prev, markedUsed: true } : prev);
+      console.info('✅ Marked as used. Tx:', response.hash);
+    } catch (error) {
+      console.error('Error marking used:', error);
+    } finally {
+      setIsMarking(false);
+    }
   };
 
   return (
@@ -282,10 +336,12 @@ export default function Pharmacy() {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-xl font-semibold text-green-600 dark:text-green-400">
-                    Authentic & Unused
+                    {result.demoMode ? 'Demo Mode: Valid Format' : 'Authentic & Unused'}
                   </h3>
                   <p className="text-muted-foreground">
-                    This prescription is valid and has not been used before.
+                    {result.demoMode 
+                      ? 'Prescription data is valid. Deploy smart contract for blockchain verification.'
+                      : 'This prescription is valid and has not been used before.'}
                   </p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4 text-left space-y-2">
@@ -301,6 +357,17 @@ export default function Pharmacy() {
                     <span className="block">Data Hash:</span>
                     <code className="font-mono break-all">{result.dataHash}</code>
                   </div>
+                  {!result.demoMode && (
+                    <div className="flex justify-center pt-2">
+                      <Button 
+                        variant={result.markedUsed ? 'secondary' : 'default'}
+                        onClick={handleMarkUsed}
+                        disabled={isMarking || result.markedUsed}
+                      >
+                        {result.markedUsed ? 'Marked as Used' : isMarking ? 'Marking...' : 'Mark as Used'}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (

@@ -7,10 +7,10 @@ const wallets = [new PetraWallet()];
 export function WalletProvider({ children }: PropsWithChildren) {
   return (
     <AptosWalletAdapterProvider
-      plugins={wallets as any}
+      wallets={wallets}
       autoConnect={true}
       onError={(error) => {
-        console.error('Wallet error:', error);
+        console.error('Wallet connection error:', error);
       }}
     >
       {children}
