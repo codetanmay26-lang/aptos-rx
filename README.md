@@ -1,63 +1,112 @@
-# AptosRx - Blockchain Prescription Verification
+# AptosRx: Decentralized Prescription Ledger
 
-## Overview
-AptosRx is a blockchain-powered prescription management dApp built on the Aptos network. It enables doctors to issue tamper-proof prescriptions and pharmacies to verify their authenticity using blockchain technology.
+> Blockchain-backed prescription issuance and verification for doctors and pharmacies on Aptos
 
-## Current State
-- **Status**: MVP Complete
-- **Network**: Aptos Testnet
-- **Wallet**: Petra Wallet integration
+[![Made with React](https://img.shields.io/badge/Made%20with-React-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![TailwindCSS](https://img.shields.io/badge/Styled%20with-Tailwind-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![Aptos](https://img.shields.io/badge/On-Aptos-0C101A?style=flat-square&logo=aptos)](https://aptos.dev/)
+[![Firebase](https://img.shields.io/badge/Storage-Firebase-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com/)
 
-## Features
-- **Doctor Dashboard**: Issue prescriptions with patient details, medication info, and dosage
-- **Pharmacy Portal**: Verify prescription authenticity against blockchain records
-- **Wallet Integration**: Connect with Petra Wallet for transaction signing
-- **SHA-256 Hashing**: Prescription data is hashed before storing on-chain
+## ▸ Overview
 
-## Project Architecture
+AptosRx lets doctors issue tamper-resistant prescriptions and pharmacies verify them. On-chain hashes ensure authenticity; Firestore stores a friendly off-chain record for quick lookups.
 
-### Frontend (client/)
-- **Framework**: React with TypeScript
-- **Styling**: Tailwind CSS with Shadcn UI components
-- **Routing**: Wouter for client-side routing
-- **State**: React Query for server state management
+### ▸ Problem
+- Paper or PDF prescriptions are easy to forge or modify
+- Pharmacies need a fast authenticity check without heavy blockchain UX
+- Doctors need a simple, wallet-friendly way to issue signed prescriptions
 
-### Key Files
-- `client/src/App.tsx` - Main app with routing and providers
-- `client/src/components/Layout.tsx` - Navigation and layout
-- `client/src/components/WalletProvider.tsx` - Aptos wallet context
-- `client/src/pages/Home.tsx` - Landing page
-- `client/src/pages/Doctor.tsx` - Prescription issuance
-- `client/src/pages/Pharmacy.tsx` - Prescription verification
-- `client/src/lib/aptosClient.ts` - Blockchain interaction utilities
-- `client/src/lib/hash.ts` - SHA-256 hashing utilities
+## ▸ Key Features
 
-### Smart Contract (smart-contract/)
-- **Language**: Move
-- **Module**: `aptos_rx_prescription`
-- **Functions**: `issue_prescription`, `verify_prescription`, `mark_used`
+🔹 **Doctor Dashboard** – Create prescriptions; data is hashed (SHA-256) and recorded via Aptos
+🔹 **Pharmacy Portal** – Verify prescriptions and mark them as used
+🔹 **Wallet Integration** – Petra wallet via Aptos wallet adapter
+🔹 **Firestore Mirror** – Off-chain prescription records with status (`issued` → `used`)
+🔹 **Simple Flows** – Minimal steps: Issue → Verify/Mark Used
 
-## Environment Variables
-- `VITE_APTOS_NODE_URL` - Aptos node URL (default: testnet)
-- `VITE_APTOS_CONTRACT_ADDRESS` - Deployed contract address
+## ▸ Tech Stack
 
-## Deployment
-To deploy the smart contract:
-1. Install Aptos CLI
-2. Initialize with `aptos init --network testnet`
-3. Fund account with `aptos account fund-with-faucet`
-4. Update Move.toml with account address
-5. Publish with `aptos move publish`
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 18, Vite, TypeScript, Wouter, Tailwind CSS, shadcn/ui, React Query |
+| Blockchain | Aptos Move (aptos_rx_prescription), @aptos-labs/ts-sdk, Petra wallet adapter |
+| Backend | Express (middleware mode for Vite), tsx runner |
+| Storage | Firebase Firestore (prescriptions collection) |
+| Forms & Validation | react-hook-form, zod |
+| UI | Radix primitives via shadcn/ui, lucide-react icons |
 
-## How It Works
-1. **Doctor Issues Prescription**: Enters patient/medication details, data is hashed, hash stored on Aptos
-2. **Patient Receives**: Prescription ID and doctor's wallet address
-3. **Pharmacy Verifies**: Enters same details + doctor address, hash compared against blockchain
-4. **Result**: Prescription verified as authentic or invalid
+## ▸ Prerequisites
+- Node.js 18+
+- npm
+- Petra wallet (for signing) on Aptos Testnet
 
-## Recent Changes
-- December 17, 2025: Initial MVP implementation
-  - Complete frontend with Doctor/Pharmacy workflows
-  - Aptos wallet integration with Petra
-  - Smart contract with issue/verify/mark_used functions
-  - Fixed hash alignment between issuance and verification
+## ▸ Environment
+Create `.env.local` at repo root:
+```
+VITE_APTOS_NODE_URL=https://fullnode.testnet.aptoslabs.com/v1
+VITE_APTOS_CONTRACT_ADDRESS=your_deployed_contract
+
+# Firebase
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+
+# Backend
+PORT=5005
+NODE_ENV=development
+```
+
+## ▸ Installation & Run
+```bash
+npm install
+npm run dev -- --host   
+```
+
+## ▸ Usage
+1) Connect Petra wallet (Testnet) in the app
+2) Doctor: issue a prescription → on-chain hash, Firestore record (status `issued`)
+3) Pharmacy: verify + mark used → on-chain call, Firestore status updates to `used`
+
+## ▸ Smart Contract
+- Module: `aptos_rx_prescription`
+- Functions: `issue_prescription`, `mark_used`
+- Deploy with Aptos CLI (`aptos move publish --named-addresses aptos_rx_prescription=default`)
+
+## ▸ Firestore Data
+- Collection: `prescriptions`
+- Fields: `prescriptionId`, `patientName`, `patientAge`, `medication`, `dosage`, `doctorAddress`, `dataHash`, `status` (`issued`/`used`), `network`, timestamps (`issuedAt`, `usedAt`)
+
+## ▸ Project Structure
+```
+Feature-Builder
+├─ client
+│  ├─ public
+│  └─ src
+├─ server
+├─ smart-contract
+├─ shared
+├─ script
+├─ attached_assets
+├─ .env.local
+├─ package.json
+└─ README.md
+```
+
+## ▸ Achievements
+- End-to-end issuance → verification flow on Aptos Testnet
+- Off-chain mirror in Firestore for fast reads and auditability
+- Petra wallet integration with TypeScript-first client
+
+## ▸ Acknowledgments
+- Aptos & Petra wallet teams
+- Firebase & React communities
+- shadcn/ui and Radix UI contributors
+
+<div align="center">
+  <strong>AptosRx: Decentralized Prescription Ledger</strong><br>
+  Made with ❤️ by Sudo cure
+</div>

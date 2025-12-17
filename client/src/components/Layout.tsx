@@ -63,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white font-bold text-sm">
                     Rx
                   </div>
-                  <span className="text-lg font-bold text-foreground">AptosRx</span>
+                  <span className="text-lg font-bold text-foreground">AptosRx: Decentralized Prescription Ledger</span>
                 </div>
               </Link>
               <Badge variant="outline" className="hidden sm:flex items-center gap-1.5 bg-green-500/10 border-green-500/20 text-green-700">
@@ -168,7 +168,7 @@ export function Layout({ children }: LayoutProps) {
       <footer className="border-t mt-auto">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>AptosRx - Blockchain Prescription Verification</p>
+            <p>AptosRx: Decentralized Prescription Ledger</p>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500" />
               Connected to Aptos Testnet
