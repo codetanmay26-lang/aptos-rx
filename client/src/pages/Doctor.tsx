@@ -125,18 +125,19 @@ export default function Doctor() {
   if (!connected) {
     return (
       <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader className="text-center space-y-2">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
-              <Wallet className="w-8 h-8 text-muted-foreground" />
+        <Card className="border-l-4 border-l-primary/50 overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10" />
+          <CardHeader className="text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto border-2 border-primary/20">
+              <Wallet className="w-8 h-8 text-primary" />
             </div>
-            <CardTitle>Connect Your Wallet</CardTitle>
+            <CardTitle className="text-2xl">Connect Your Wallet</CardTitle>
             <CardDescription>
               Please connect your Petra wallet to issue prescriptions on the Aptos blockchain.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground">
               Make sure you have the Petra wallet extension installed and are connected to Aptos Testnet.
             </p>
           </CardContent>
@@ -147,17 +148,20 @@ export default function Doctor() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Issue New Prescription</h1>
+      <div className="space-y-2 animate-fade-in">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">Issue New Prescription</h1>
         <p className="text-muted-foreground">
           Fill in the prescription details below. The data will be hashed and recorded on the Aptos blockchain.
         </p>
       </div>
 
-      <Card>
+      <Card className="border-l-4 border-l-primary/50 overflow-hidden backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="w-5 h-5" />
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <FileText className="w-5 h-5 text-primary" />
+            </div>
             Prescription Details
           </CardTitle>
           <CardDescription>
@@ -178,7 +182,7 @@ export default function Doctor() {
                         <Input 
                           {...field} 
                           placeholder="RX-123456789"
-                          className="font-mono"
+                          className="font-mono bg-background/50 border-border/50 focus:border-primary/30"
                           data-testid="input-prescription-id"
                         />
                         <Button
@@ -186,6 +190,7 @@ export default function Doctor() {
                           variant="outline"
                           size="icon"
                           onClick={() => form.setValue('prescriptionId', generatePrescriptionId())}
+                          className="hover:bg-primary/10 transition-colors"
                           data-testid="button-generate-id"
                         >
                           <FileText className="w-4 h-4" />

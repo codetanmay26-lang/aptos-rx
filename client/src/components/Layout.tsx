@@ -40,18 +40,34 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="min-h-screen bg-white relative">
+      {/* Subtle background elements - only visible on home page through overlays */}
+      <div className="fixed inset-0 -z-20 pointer-events-none">
+        {/* Subtle grid pattern */}
+        <svg className="w-full h-full opacity-[0.015]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
+      <header className="sticky top-0 z-50 border-b border-border/50 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <Link href="/">
-                <span className="text-xl font-bold text-foreground cursor-pointer">
-                  AptosRx
-                </span>
+                <div className="flex items-center gap-2 cursor-pointer group">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                    Rx
+                  </div>
+                  <span className="text-lg font-bold text-foreground">AptosRx</span>
+                </div>
               </Link>
-              <Badge variant="outline" className="hidden sm:flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
+              <Badge variant="outline" className="hidden sm:flex items-center gap-1.5 bg-green-500/10 border-green-500/20 text-green-700">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 Aptos Testnet
               </Badge>
             </div>

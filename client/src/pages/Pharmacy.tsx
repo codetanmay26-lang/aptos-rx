@@ -103,17 +103,20 @@ export default function Pharmacy() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Verify Prescription</h1>
+      <div className="space-y-2 animate-fade-in">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-blue-600 bg-clip-text text-transparent">Verify Prescription</h1>
         <p className="text-muted-foreground">
           Enter the prescription details and doctor's wallet address to verify authenticity against the blockchain record.
         </p>
       </div>
 
-      <Card>
+      <Card className="border-l-4 border-l-blue-500/50 overflow-hidden backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10" />
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="w-5 h-5" />
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <div className="p-2 rounded-lg bg-blue-500/10">
+              <Shield className="w-5 h-5 text-blue-600" />
+            </div>
             Prescription Verification
           </CardTitle>
           <CardDescription>
