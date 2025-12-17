@@ -82,7 +82,7 @@ export function Layout({ children }: LayoutProps) {
                   <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md bg-muted">
                     <span className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm font-mono text-muted-foreground">
-                      {truncateAddress(account.address)}
+                      {truncateAddress(account.address.toString())}
                     </span>
                   </div>
                   <Button

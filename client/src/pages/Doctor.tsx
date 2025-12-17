@@ -93,7 +93,7 @@ export default function Doctor() {
       const payload = buildIssuePrescriptionPayload(data.prescriptionId, dataHash);
 
       const response = await signAndSubmitTransaction({
-        data: payload,
+        data: payload as any,
       });
 
       setResult({
@@ -101,7 +101,7 @@ export default function Doctor() {
         hash: response.hash,
         prescriptionId: data.prescriptionId,
         dataHash: dataHash,
-        doctorAddress: account.address,
+        doctorAddress: account.address.toString(),
       });
 
       form.reset({
