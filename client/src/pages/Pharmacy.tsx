@@ -403,21 +403,6 @@ export default function Pharmacy() {
         </Card>
       )}
 
-      <Card className="bg-muted/30">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-            <div className="space-y-1 text-sm text-muted-foreground">
-              <p className="font-medium text-foreground">How Verification Works</p>
-              <p>
-                The prescription details you enter are hashed using SHA-256 and compared against
-                the hash stored on the Aptos blockchain under the doctor's account. If the hashes match and the prescription
-                has not been marked as used, the verification is successful.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
