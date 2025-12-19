@@ -65,7 +65,13 @@ NODE_ENV=development
 npm install
 npm run dev -- --host   
 ```
+## ▸ Deployment
 
+ **Live Deployment:**  https://aptos-rx.onrender.com
+
+## ▸ Project Demo Video
+
+**Watch the Demo:** [https://youtu.be/UaV2lS9TTdA](https://youtu.be/UaV2lS9TTdA)
 ## ▸ Usage
 1) Connect Petra wallet (Testnet) in the app
 2) Doctor: issue a prescription → on-chain hash, Firestore record (status `issued`)
