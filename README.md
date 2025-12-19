@@ -82,7 +82,7 @@ npm run dev -- --host
 
 ## ▸ Project Structure
 ```
-Aptos-Rx
+Feature-Builder
 ├─ client
 │  ├─ public
 │  └─ src
