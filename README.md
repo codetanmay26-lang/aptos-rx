@@ -19,11 +19,11 @@ AptosRx lets doctors issue tamper-resistant prescriptions and pharmacies verify 
 
 ## ▸ Key Features
 
-🔹 **Doctor Dashboard** – Create prescriptions; data is hashed (SHA-256) and recorded via Aptos
-🔹 **Pharmacy Portal** – Verify prescriptions and mark them as used
-🔹 **Wallet Integration** – Petra wallet via Aptos wallet adapter
-🔹 **Firestore Mirror** – Off-chain prescription records with status (`issued` → `used`)
-🔹 **Simple Flows** – Minimal steps: Issue → Verify/Mark Used
+- 🔹 **Doctor Dashboard** – Create prescriptions; data is hashed (SHA-256) and recorded via Aptos
+- 🔹 **Pharmacy Portal** – Verify prescriptions and mark them as used
+- 🔹 **Wallet Integration** – Petra wallet via Aptos wallet adapter
+- 🔹 **Firestore Mirror** – Off-chain prescription records with status (`issued` → `used`)
+- 🔹 **Simple Flows** – Minimal steps: Issue → Verify/Mark Used
 
 ## ▸ Tech Stack
 
